@@ -1,5 +1,9 @@
 # Go-PostUp
-A Go client for the upland PostUp API.
+[![Go Reference](https://pkg.go.dev/badge/github.com/cheddartv/go-postup.svg)](https://pkg.go.dev/github.com/cheddartv/go-postup)
+[![Go Report Card](https://goreportcard.com/badge/github.com/cheddartv/go-postup)](https://goreportcard.com/report/github.com/cheddartv/go-postup)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A Go client for the [Upland PostUp](https://uplandsoftware.com/postup/) [API](https://apidocs.postup.com/docs).
 
 ## How to use
 The PostUp API uses basic authentication, this means that you only need to provide a PostUp username and password to the `postup.NewPostUp` method. It is safe to call the client from multiple Goroutines.
