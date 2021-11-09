@@ -10,10 +10,7 @@ import (
 
 type SubscriptionStatus string
 
-const (
-	SubscriptionStatusNormal = "NORMAL"
-	SubscriptionStatusUnsub  = "UNSUB"
-)
+const SubscriptionStatusNormal SubscriptionStatus = "NORMAL"
 
 type SubscribeRecipientRequest struct {
 	Recipient *Recipient

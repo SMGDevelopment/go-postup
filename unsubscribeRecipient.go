@@ -7,6 +7,8 @@ import (
 	"fmt"
 )
 
+const SubscriptionStatusUnsub SubscriptionStatus = "UNSUB"
+
 type UnsubscribeRecipientRequest struct {
 	Recipient *Recipient
 	List      *List
