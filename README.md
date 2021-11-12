@@ -59,7 +59,7 @@ func main() {
 ### Recipient Privacy
 - [ ] Return recipient privacy data
 - [ ] Delete all recipient privacy data
-- [ ] Delete recipient from database
+- [x] Delete recipient from database
 - [ ] Delete recipient location data
 - [ ] Delete recipient contact data
 - [ ] Delete recipient demographics data
