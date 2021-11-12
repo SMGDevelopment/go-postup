@@ -33,5 +33,7 @@ jobs:
           ./cc-test-reporter before-build
           GO111MODULE=on go test -coverprofile=c.out -v ./...
           mkdir -p ./github.com/$GIT_REPO
-          cp -r ./* ./github.com/$GIT_REPO
+          cp -r ./*.go ./github.com/$GIT_REPO
+          cp -r ./go.mod ./github.com/$GIT_REPO
+          cp -r ./go.sum ./github.com/$GIT_REPO
           ./cc-test-reporter after-build --coverage-input-type gocov --exit-code $? -d
