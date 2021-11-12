@@ -1,0 +1,35 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+jobs:
+  Test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: Set up Go 1.16
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.16
+        id: go
+      - name: codeclimate
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          GIT_BRANCH: ${{ github.head_ref }}
+          GIT_COMMIT_SHA: ${{ github.sha }}
+          GIT_REPO: ${{ github.repository }}
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter before-build
+          GO111MODULE=on go test -coverprofile=c.out -v ./...
+          mkdir -p ./github.com/$GIT_REPO
+          cp -r ./pkg ./github.com/$GIT_REPO
+          cp -r ./cmd ./github.com/$GIT_REPO
+          cp -r ./api ./github.com/$GIT_REPO
+          ./cc-test-reporter after-build --coverage-input-type gocov --exit-code $? -d
