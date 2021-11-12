@@ -134,3 +134,55 @@ func (pu *PostUp) GetRecipientByRecipientID(ctx context.Context, id int) (*Recip
 
 	return pu.getRecipient(ctx, u)
 }
+
+func (pu *PostUp) getRecipient(ctx context.Context, url string) (*Recipient, error) {
+	req, err := pu.newRequest(ctx, "GET", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+
+	resp, err := pu.do(req)
+	if err != nil {
+		return nil, fmt.Errorf("encountered network error: %w", err)
+	}
+
+	var rs []*Recipient
+	if err := pu.decodeJSON(resp, &rs); err != nil {
+		return nil, err
+	}
+
+	if 0 < len(rs) {
+		return rs[0], nil
+	}
+
+	return nil, ErrRecipientNotFound
+}
+
+type DeleteRecipientResponse struct {
+	Message string `json:"message"`
+	Status  string `json:"status"`
+}
+
+func (pu *PostUp) DeleteRecipientByAddress(ctx context.Context, addr string) (*DeleteRecipientResponse, error) {
+	var u = pu.url("recipient/privacy", url.Values{
+		"address": []string{addr},
+		"scope":   []string{"forget"},
+	})
+
+	req, err := pu.newRequest(ctx, "DELETE", u, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+
+	resp, err := pu.do(req)
+	if err != nil {
+		return nil, fmt.Errorf("encountered network error: %w", err)
+	}
+
+	var drr DeleteRecipientResponse
+	if err := pu.decodeJSON(resp, &drr); err != nil {
+		return nil, err
+	}
+
+	return &drr, nil
+}
