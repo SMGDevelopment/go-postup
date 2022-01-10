@@ -46,7 +46,7 @@ func TestPostUp_RecipientCreate_OK(t *testing.T) {
 	)
 
 	go func() {
-		payload, err := json.Marshal([]interface{}{&recipient})
+		payload, err := json.Marshal(&recipient)
 		is.NoErr(err)
 
 		pipe2.Write(append([]byte("HTTP/1.1 200 OK\nContent-Type: application/json\n\n"), payload...))
