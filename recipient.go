@@ -22,7 +22,6 @@ type Recipient struct {
 	SourceSignupDate  time.Time         `json:"sourceSignupDate"`
 	SignupMethod      string            `json:"signupMethod"`
 	DateJoined        time.Time         `json:"dateJoined"`
-	DateUnsub         *time.Time        `json:"dateUnsub"`
 	Demographics      map[string]string `json:"-"`
 }
 
@@ -40,7 +39,6 @@ func (r *Recipient) UnmarshalJSON(data []byte) error {
 		SourceSignupDate  time.Time         `json:"sourceSignupDate"`
 		SignupMethod      string            `json:"signupMethod"`
 		DateJoined        time.Time         `json:"dateJoined"`
-		DateUnsub         *time.Time        `json:"dateUnsub"`
 		Demographics      map[string]string `json:"-"`
 	}
 	var buf struct {
