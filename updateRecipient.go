@@ -61,10 +61,10 @@ func (pu *PostUp) RecipientUpdate(ctx context.Context, id int, urr *UpdateRecipi
 		return nil, fmt.Errorf("encountered network error while updating user with postup: %w", err)
 	}
 
-	var rs []*Recipient
+	var rs Recipient
 	if err := pu.decodeJSON(resp, &rs); err != nil {
 		return nil, fmt.Errorf("error unmarshaling json response body from postup: %w", err)
 	}
 
-	return rs[0], nil
+	return &rs, nil
 }
