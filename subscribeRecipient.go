@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"time"
 )
 
 type SubscriptionStatus string
@@ -26,8 +25,8 @@ type SubscribeRecipientResponse struct {
 	Status       SubscriptionStatus `json:"status"`
 	ListStatus   string             `json:"listStatus"`
 	GlobalStatus string             `json:"globalStatus"`
-	DateUnsub    *time.Time         `json:"dateUnsub"`
-	DateJoined   time.Time          `json:"dateJoined"`
+	DateUnsub    *Time              `json:"dateUnsub"`
+	DateJoined   Time               `json:"dateJoined"`
 	SourceID     string             `json:"sourceId,omitempty"`
 	Confirmed    bool               `json:"confirmed"`
 }
