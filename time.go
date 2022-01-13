@@ -40,6 +40,87 @@ func (t *Time) UnmarshalJSON(data []byte) error {
 	}
 
 	t.t, err = time.Parse("2006-01-02 15:04:05", s)
+	if err == nil {
+		return nil
+	}
+
+	// single and double digit variations on DD/MM/YYYY HH:mm
+	t.t, err = time.Parse("01/02/2006 15:04", s)
+	if err == nil {
+		return nil
+	}
+
+	t.t, err = time.Parse("01/02/2006 15:4", s)
+	if err == nil {
+		return nil
+	}
+
+	t.t, err = time.Parse("1/02/2006 15:04", s)
+	if err == nil {
+		return nil
+	}
+
+	t.t, err = time.Parse("1/02/2006 15:4", s)
+	if err == nil {
+		return nil
+	}
+
+	t.t, err = time.Parse("01/2/2006 15:04", s)
+	if err == nil {
+		return nil
+	}
+
+	t.t, err = time.Parse("01/2/2006 15:4", s)
+	if err == nil {
+		return nil
+	}
+
+	t.t, err = time.Parse("1/2/2006 15:04", s)
+	if err == nil {
+		return nil
+	}
+
+	t.t, err = time.Parse("1/2/2006 15:4", s)
+	if err == nil {
+		return nil
+	}
+
+	t.t, err = time.Parse("01/02/06 15:04", s)
+	if err == nil {
+		return nil
+	}
+
+	t.t, err = time.Parse("01/02/06 15:4", s)
+	if err == nil {
+		return nil
+	}
+
+	t.t, err = time.Parse("1/02/06 15:04", s)
+	if err == nil {
+		return nil
+	}
+
+	t.t, err = time.Parse("1/02/06 15:4", s)
+	if err == nil {
+		return nil
+	}
+
+	t.t, err = time.Parse("01/2/06 15:04", s)
+	if err == nil {
+		return nil
+	}
+
+	t.t, err = time.Parse("01/2/06 15:4", s)
+	if err == nil {
+		return nil
+	}
+
+	t.t, err = time.Parse("1/2/06 15:04", s)
+	if err == nil {
+		return nil
+	}
+
+	t.t, err = time.Parse("1/2/06 15:4", s)
 
 	return err
 }
