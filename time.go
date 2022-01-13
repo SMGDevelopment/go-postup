@@ -2,6 +2,7 @@ package postup
 
 import (
 	"encoding/json"
+	"strings"
 	"time"
 )
 
@@ -19,6 +20,9 @@ func (t *Time) UnmarshalJSON(data []byte) error {
 		s   = string(data)
 		err error
 	)
+
+	s = strings.TrimPrefix(s, "\"")
+	s = strings.TrimSuffix(s, "\"")
 
 	t.t, err = time.Parse("2006-01-02T15:04:05Z", s)
 	if err == nil {
