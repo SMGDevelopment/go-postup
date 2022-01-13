@@ -43,3 +43,7 @@ func (t *Time) UnmarshalJSON(data []byte) error {
 func (t *Time) MarshalJSON() ([]byte, error) {
 	return json.Marshal(t.t)
 }
+
+func (t *Time) GetTime() time.Time {
+	return t.t
+}
