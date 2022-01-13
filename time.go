@@ -10,6 +10,10 @@ type Time struct {
 	t time.Time
 }
 
+func NewTime(t time.Time) Time {
+	return Time{t}
+}
+
 func (t *Time) UnmarshalJSON(data []byte) error {
 	var (
 		s   = string(data)
