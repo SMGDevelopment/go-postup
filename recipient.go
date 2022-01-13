@@ -18,9 +18,9 @@ type Recipient struct {
 	Comment           string            `json:"comment"`
 	Password          string            `json:"password"`
 	SourceDescription string            `json:"sourceDescription"`
-	SourceSignupDate  Time              `json:"sourceSignupDate"`
+	SourceSignupDate  *Time             `json:"sourceSignupDate,omitempty"`
 	SignupMethod      string            `json:"signupMethod"`
-	DateJoined        Time              `json:"dateJoined"`
+	DateJoined        *Time             `json:"dateJoined,omitempty"`
 	Demographics      map[string]string `json:"-"`
 }
 
@@ -35,9 +35,9 @@ func (r *Recipient) UnmarshalJSON(data []byte) error {
 		Comment           string            `json:"comment"`
 		Password          string            `json:"password"`
 		SourceDescription string            `json:"sourceDescription"`
-		SourceSignupDate  Time              `json:"sourceSignupDate"`
+		SourceSignupDate  *Time             `json:"sourceSignupDate,omitempty"`
 		SignupMethod      string            `json:"signupMethod"`
-		DateJoined        Time              `json:"dateJoined"`
+		DateJoined        *Time             `json:"dateJoined,omitempty"`
 		Demographics      map[string]string `json:"-"`
 	}
 	var buf struct {

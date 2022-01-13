@@ -12,13 +12,9 @@ type Time struct {
 
 func (t *Time) UnmarshalJSON(data []byte) error {
 	var (
-		s   string
-		err = json.Unmarshal(data, &s)
+		s   = string(data)
+		err error
 	)
-
-	if err != nil {
-		return err
-	}
 
 	t.t, err = time.Parse("2006-01-02T15:04:05Z", s)
 	if err == nil {

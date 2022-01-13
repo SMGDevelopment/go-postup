@@ -25,8 +25,8 @@ type SubscribeRecipientResponse struct {
 	Status       SubscriptionStatus `json:"status"`
 	ListStatus   string             `json:"listStatus"`
 	GlobalStatus string             `json:"globalStatus"`
-	DateUnsub    *Time              `json:"dateUnsub"`
-	DateJoined   Time               `json:"dateJoined"`
+	DateUnsub    *Time              `json:"dateUnsub,omitempty"`
+	DateJoined   *Time              `json:"dateJoined,omitempty"`
 	SourceID     string             `json:"sourceId,omitempty"`
 	Confirmed    bool               `json:"confirmed"`
 }
