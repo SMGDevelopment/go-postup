@@ -5,8 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
-	"os"
 )
 
 type CreateRecipientRequest struct {
@@ -17,7 +15,7 @@ type CreateRecipientRequest struct {
 	Comment           string            `json:"comment,omitempty"`
 	Password          string            `json:"password,omitempty"`
 	SourceDescription string            `json:"sourceDescription,omitempty"`
-	Demographics      map[string]string `json:"-,omitempty"`
+	Demographics      map[string]string `json:"-"`
 }
 
 func (crr *CreateRecipientRequest) MarshalJSON() ([]byte, error) {
@@ -52,10 +50,6 @@ func (pu *PostUp) RecipientCreate(ctx context.Context, crr *CreateRecipientReque
 		return nil, fmt.Errorf("error marshaling JSON recipient create payload for PostUp: %w", err)
 	}
 
-	fmt.Println("---PAYLOAD---")
-	fmt.Println(string(payload))
-	fmt.Println("---")
-
 	req, err := pu.newRequest(ctx, "POST", reqURL, bytes.NewBuffer(payload))
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -65,11 +59,6 @@ func (pu *PostUp) RecipientCreate(ctx context.Context, crr *CreateRecipientReque
 	if err != nil {
 		return nil, fmt.Errorf("encountered network error: %w", err)
 	}
-
-	fmt.Println("---RESPONSE BODY---")
-	io.Copy(os.Stdout, resp.Body)
-	fmt.Println("---")
-	panic(1)
 
 	var rs Recipient
 	if err := pu.decodeJSON(resp, &rs); err != nil {

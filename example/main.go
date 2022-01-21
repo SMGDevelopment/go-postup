@@ -56,6 +56,10 @@ func main() {
 		err = createRecipient(ctx, address, pu, writer)
 	case "delete":
 		err = deleteRecipient(ctx, address, pu, writer)
+	case "get-list":
+		err = getList(ctx, address, pu, writer)
+	case "get-lists":
+		err = getLists(ctx, pu, writer)
 	case "get":
 		fallthrough
 	default:
@@ -92,6 +96,24 @@ func createRecipient(ctx context.Context, addr string, p *postup.PostUp, w *json
 
 func deleteRecipient(ctx context.Context, addr string, p *postup.PostUp, w *json.Encoder) error {
 	res, err := p.DeleteRecipientByAddress(ctx, addr)
+	if err != nil {
+		return err
+	}
+
+	return w.Encode(res)
+}
+
+func getLists(ctx context.Context, p *postup.PostUp, w *json.Encoder) error {
+	res, err := p.GetLists(ctx)
+	if err != nil {
+		return err
+	}
+
+	return w.Encode(res)
+}
+
+func getList(ctx context.Context, addr string, p *postup.PostUp, w *json.Encoder) error {
+	res, err := p.GetListByTitle(ctx, addr)
 	if err != nil {
 		return err
 	}
