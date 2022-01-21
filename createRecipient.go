@@ -5,24 +5,25 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+	"os"
 )
 
 type CreateRecipientRequest struct {
-	ExternalID        string            `json:"externalId"`
-	ImportID          int               `json:"importId"`
-	Address           string            `json:"address"`
-	Channel           string            `json:"channel"`
-	Status            string            `json:"status"`
-	Comment           string            `json:"comment"`
-	Password          string            `json:"password"`
-	SourceDescription string            `json:"sourceDescription"`
-	Demographics      map[string]string `json:"-"`
+	ExternalID        string            `json:"externalId,omitempty"`
+	Address           string            `json:"address,omitempty"`
+	Channel           string            `json:"channel,omitempty"`
+	Status            string            `json:"status,omitempty"`
+	Comment           string            `json:"comment,omitempty"`
+	Password          string            `json:"password,omitempty"`
+	SourceDescription string            `json:"sourceDescription,omitempty"`
+	Demographics      map[string]string `json:"-,omitempty"`
 }
 
 func (crr *CreateRecipientRequest) MarshalJSON() ([]byte, error) {
 	var buf struct {
 		CreateRecipientRequest
-		DemographicsList []string `json:"demographics"`
+		DemographicsList []string `json:"demographics,omitempty"`
 	}
 
 	var (
@@ -51,6 +52,10 @@ func (pu *PostUp) RecipientCreate(ctx context.Context, crr *CreateRecipientReque
 		return nil, fmt.Errorf("error marshaling JSON recipient create payload for PostUp: %w", err)
 	}
 
+	fmt.Println("---PAYLOAD---")
+	fmt.Println(string(payload))
+	fmt.Println("---")
+
 	req, err := pu.newRequest(ctx, "POST", reqURL, bytes.NewBuffer(payload))
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -60,6 +65,11 @@ func (pu *PostUp) RecipientCreate(ctx context.Context, crr *CreateRecipientReque
 	if err != nil {
 		return nil, fmt.Errorf("encountered network error: %w", err)
 	}
+
+	fmt.Println("---RESPONSE BODY---")
+	io.Copy(os.Stdout, resp.Body)
+	fmt.Println("---")
+	panic(1)
 
 	var rs Recipient
 	if err := pu.decodeJSON(resp, &rs); err != nil {

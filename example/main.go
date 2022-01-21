@@ -11,18 +11,20 @@ import (
 )
 
 func main() {
-	if len(os.Args) < 3 {
-		log.Fatalf("usage: %s PATH ADDRESS", os.Args[0])
+	if len(os.Args) < 4 {
+		log.Fatalf("usage: %s PATH ACTION ADDRESS", os.Args[0])
 	}
 
 	var (
 		ctx = context.Background()
 
-		address = os.Args[2]
+		action  = os.Args[2]
+		address = os.Args[3]
 
 		username string
 		password string
 	)
+
 	{
 		data, err := ioutil.ReadFile(os.Args[1])
 		if err != nil {
@@ -48,19 +50,51 @@ func main() {
 	)
 	writer.SetIndent("", "\t")
 
-	recipient, err := pu.GetRecipientByAddress(ctx, address)
+	var err error
+	switch action {
+	case "create":
+		err = createRecipient(ctx, address, pu, writer)
+	case "delete":
+		err = deleteRecipient(ctx, address, pu, writer)
+	case "get":
+		fallthrough
+	default:
+		err = getRecipient(ctx, address, pu, writer)
+	}
+
 	if err != nil {
 		log.Fatal(err)
 	}
+}
 
-	writer.Encode(recipient)
-
-	lists, err := pu.GetLists(ctx)
+func getRecipient(ctx context.Context, addr string, p *postup.PostUp, w *json.Encoder) error {
+	recipient, err := p.GetRecipientByAddress(ctx, addr)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
-	os.Stdout.Write([]byte("\n- - - -\n\n"))
+	return w.Encode(recipient)
+}
 
-	writer.Encode(lists)
+func createRecipient(ctx context.Context, addr string, p *postup.PostUp, w *json.Encoder) error {
+	res, err := p.RecipientCreate(ctx, &postup.CreateRecipientRequest{
+		ExternalID: addr,
+		Address:    addr,
+		Channel:    "E",
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return w.Encode(res)
+}
+
+func deleteRecipient(ctx context.Context, addr string, p *postup.PostUp, w *json.Encoder) error {
+	res, err := p.DeleteRecipientByAddress(ctx, addr)
+	if err != nil {
+		return err
+	}
+
+	return w.Encode(res)
 }
