@@ -12,7 +12,7 @@ import (
 
 func main() {
 	if len(os.Args) < 4 {
-		log.Fatalf("usage: %s PATH ACTION ADDRESS", os.Args[0])
+		log.Fatalf("usage: %s PATH ACTION ADDRESS [ARGS...]", os.Args[0])
 	}
 
 	var (
@@ -20,6 +20,7 @@ func main() {
 
 		action  = os.Args[2]
 		address = os.Args[3]
+		args    = os.Args[4:]
 
 		username string
 		password string
@@ -54,6 +55,8 @@ func main() {
 	switch action {
 	case "create":
 		err = createRecipient(ctx, address, pu, writer)
+	case "subscribe":
+		err = subscribeRecipient(ctx, address, args[0], pu, writer)
 	case "delete":
 		err = deleteRecipient(ctx, address, pu, writer)
 	case "get-list":
@@ -85,6 +88,26 @@ func createRecipient(ctx context.Context, addr string, p *postup.PostUp, w *json
 		ExternalID: addr,
 		Address:    addr,
 		Channel:    "E",
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return w.Encode(res)
+}
+
+func subscribeRecipient(ctx context.Context, addr, mailingList string, p *postup.PostUp, w *json.Encoder) error {
+	list, err := p.GetListByTitle(ctx, mailingList)
+	if err != nil {
+		return err
+	}
+
+	res, err := p.SubscribeRecipientToList(ctx, &postup.SubscribeRecipientRequest{
+		Recipient: &postup.Recipient{
+			Address: addr,
+		},
+		List: list,
 	})
 
 	if err != nil {

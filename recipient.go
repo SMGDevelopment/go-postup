@@ -144,15 +144,26 @@ func (pu *PostUp) getRecipient(ctx context.Context, url string) (*Recipient, err
 	}
 
 	var rs []*Recipient
-	if err := pu.decodeJSON(resp, &rs); err != nil {
+	if err := pu.decodeJSON(resp, &rs); err == nil {
+		if 0 < len(rs) {
+			return rs[0], nil
+		}
+
+		return nil, ErrRecipientNotFound
+	} else if !strings.Contains(err.Error(), "cannot unmarshal object") {
+		return nil, ErrListNotFound
+	}
+
+	var recipient *Recipient
+	if err = pu.decodeJSON(resp, &recipient); err == nil {
+		if recipient != nil {
+			return recipient, nil
+		}
+
+		return nil, ErrRecipientNotFound
+	} else {
 		return nil, err
 	}
-
-	if 0 < len(rs) {
-		return rs[0], nil
-	}
-
-	return nil, ErrRecipientNotFound
 }
 
 type DeleteRecipientResponse struct {
