@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/cheddartv/go-postup"
+	"github.com/SMGDevelopment/go-postup"
 )
 
 func main() {

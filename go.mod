@@ -1,4 +1,4 @@
-module github.com/cheddartv/go-postup
+module github.com/SMGDevelopment/go-postup
 
 go 1.16
 
